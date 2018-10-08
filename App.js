@@ -11,7 +11,10 @@ import { Alert,
          TouchableHighlight,
          TouchableOpacity,
          TouchableWithoutFeedback,
-         TouchableNativeFeedback 
+         TouchableNativeFeedback,
+         ScrollView,
+         FlatList,
+         SectionList 
         } 
         from 'react-native';
 
@@ -23,20 +26,24 @@ class Greeting extends Component {
   }
 }
 
-class Blink extends Component {
+class Blink extends Component 
+{
     constructor(props) {
+
         super(props);
         this.state = { isShowingText: true };
 
         // Toggle the state every second
-        setInterval(() => {
+        setInterval(() => 
+        {
             this.setState(previousState => {
                 return { isShowingText: !previousState.isShowingText };
             });
         }, 1000);
     }
 
-    render() {
+    render() 
+    {
         let display = this.state.isShowingText ? this.props.text : ' ';
         return (
             <Text>{display}</Text>
@@ -65,7 +72,7 @@ export default class App extends Component {
   render() 
   {
     return (
-        <View style={{ flex: 3 }}>
+        <ScrollView style={{ flex: 3 }}>
             <View style={styles.first}>
                <View style={styles.buttonContainer}>
                 <Button 
@@ -109,12 +116,28 @@ export default class App extends Component {
               <Blink text='Why did they ever take this out of HTML' />
               <Blink text='Look at me look at me look at me' />
             </View>
-            <View style={{ flex: 1.5, backgroundColor: 'steelblue', flexDirection: 'column', justifyContent: 'space-between'}} >
+            <View style={styles.third} >
               <View style={{ width: '100%', height: 50, backgroundColor: 'powderblue' }} />
               <View style={{ width: '100%', height: 50, backgroundColor: 'skyblue' }} />
               <View style={{ width: '100%', height: 50, backgroundColor: 'steelblue' }} />
             </View>
-        </View>
+            <View>
+              <SectionList 
+                sections=
+                {[
+                  { title: 'A', data: ['Andy', 'Andrew']},
+                  { title: 'D', data: ['Devin', 'Danny'] },
+                  { title: 'G', data: ['Gavin'] },
+                  { title: 'I', data: ['Ian', 'Ivy']},
+                  { title: 'J', data: ['Jackson', 'James', 'Joel', 'John', 'Jillian','Jimmy'] },
+                  { title: 'V', data: ['Vivian', 'Vivian', 'Victory'] },
+                ]}
+                renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
+                renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                keyExtractor={(item, index) => index}
+              />
+            </View>
+        </ScrollView>
     );
   }
 }
@@ -123,26 +146,58 @@ export default class App extends Component {
 AppRegistry.registerComponent('AwesomeProject2', () => App);
 
 
-const styles = StyleSheet.create({
-    first: {
-      flex: 1.5,
+const styles = StyleSheet.create
+({
+    first: 
+    {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'powderblue'
     },
-    buttonContainer: {
+    buttonContainer: 
+    {
       margin: 15
     },
-    alternativeLayoutButtonContainer: {
+    alternativeLayoutButtonContainer: 
+    {
       margin: 5,
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
-    second: {
-      flex: 3,
+    second:
+    {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%', 
       backgroundColor: 'skyblue'
-  }
+    },
+    third: 
+    {
+      backgroundColor: 'steelblue', 
+      flexDirection: 'column', 
+      justifyContent: 'space-between'
+    },
+    fourth:
+    {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'powderblue',
+      paddingTop: 22
+    },
+    item: 
+    {
+      padding: 10,
+      fontSize: 18,
+      height: 44,
+    }, 
+    sectionHeader: 
+    {
+      paddingTop: 2,
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingBottom: 2,
+      fontSize: 14,
+      fontWeight: 'bold',
+      backgroundColor: 'rgba(247,247,247,1.0)',
+    },
 });
