@@ -14,7 +14,8 @@ import { Alert,
          TouchableNativeFeedback,
          ScrollView,
          FlatList,
-         SectionList 
+         SectionList,
+         ActivityIndicator 
         } 
         from 'react-native';
 
@@ -52,7 +53,8 @@ class Blink extends Component
 }
 
 
-export default class App extends Component {
+export default class App extends React.Component 
+{
   constructor(props) 
   {
     super(props);
@@ -69,10 +71,47 @@ export default class App extends Component {
     Alert.alert("You long-pressed the button!");
   }
 
+  componentDidMount() 
+  {
+    return fetch('https://facebook.github.io/react-native/movies.json')
+      .then((response) => response.json())
+      .then((responseJson) => 
+      {
+        this.setState
+        ({
+          isLoading: false,
+          dataSource: responseJson.movies,
+        }, function () 
+        {
+
+        });
+      })
+      .catch((error) => 
+      {
+        console.error(error);
+      });
+  }
+
   render() 
   {
+    if (this.state.isLoading) 
+    {
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
     return (
+        
         <ScrollView style={{ flex: 3 }}>
+            <View>
+              <FlatList
+                data={this.state.dataSource}
+                renderItem={({ item }) => <Text>{item.title}, {item.releaseYear}</Text>}
+                keyExtractor={({ id }, index) => id}
+              />
+            </View>
             <View style={styles.first}>
                <View style={styles.buttonContainer}>
                 <Button 
