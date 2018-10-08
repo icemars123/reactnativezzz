@@ -1,5 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Image } from 'react-native';
+import { Alert, 
+         StyleSheet, 
+         Text, 
+         View, 
+         AppRegistry, 
+         Image, 
+         TextInput, 
+         Button,
+         Platform,
+         TouchableHighlight,
+         TouchableOpacity,
+         TouchableWithoutFeedback,
+         TouchableNativeFeedback 
+        } 
+        from 'react-native';
 
 class Greeting extends Component {
   render() {
@@ -31,36 +45,62 @@ class Blink extends Component {
 }
 
 
-export default class App extends React.Component {
-  render() {
-    let pic = {
-      uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-    };
+export default class App extends Component {
+  constructor(props) 
+  {
+    super(props);
+    this.state = {text: ''};
+  }
+
+  _onPressButton()
+  {
+    Alert.alert('You tapped the button!');
+  }
+
+  _onLongPressButton()
+  {
+    Alert.alert("You long-pressed the button!");
+  }
+
+  render() 
+  {
     return (
-      // <Image source={pic} style={{width: 193, height: 110}}/>
-      // <View style={styles.container}>
-      //   <Text>Open up App.js to start working on your app!</Text>
-      //   <Text>Welcome Gavin!!!</Text>
-      //   <Text>Hello world!</Text>
-      // </View>
-      // <View style={styles.container}>
-      //   <View style={styles.subcontainer}>
-      //     <Greeting name='Rexxar' />
-      //     <Greeting name='Jaina' />
-      //     <Greeting name='Valeera' />
-      //     <Blink text='I love to blink'/>
-      //     <Blink text='Yes blinking is so great' />
-      //     <Blink text='Why did they ever take this out of HTML' />
-      //     <Blink text='Look at me look at me look at me' />
-      //   </View>
-      // </View>
         <View style={{ flex: 3 }}>
-            <View style={{ flex: 1.5, backgroundColor: 'powderblue', flexDirection: 'row'}}>
-              <View style={{width: 50, height: 50, backgroundColor: 'powderblue'}} />
-              <View style={{width: 50, height: 50, backgroundColor: 'skyblue'}} />
-              <View style={{width: 50, height: 50, backgroundColor: 'steelblue'}} />
+            <View style={styles.first}>
+               <View style={styles.buttonContainer}>
+                <Button 
+                  onPress={this._onPressButton}
+                  title="Press Me"
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <Button
+                  onPress={this._onPressButton}
+                  title="Press Me"
+                  color="#841584"
+                />
+              </View>
+              <View style={styles.alternativeLayoutButtonContainer}> 
+              <Button
+                onPress={this._onPressButton}
+                title="This looks great!"
+              />
+              <Button
+                onPress={this._onPressButton}
+                title="OK!"
+                color="#841584"
+              />
+            </View>
             </View> 
-            <View style={styles.subcontainer} >
+            <View style={styles.second} >
+              <TextInput 
+                style={{height: 40}} 
+                placeholder="Type here to translate!"
+                onChangeText={(text) => this.setState({text})}
+              />
+              <Text style={{padding: 10, fontSize: 66}} >
+                {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
+              </Text>
               <Greeting name='Rexxar' />
               <Greeting name='Jaina' />
               <Greeting name='Valeera' />
@@ -82,20 +122,23 @@ export default class App extends React.Component {
 // skip this line if using Create React Native App
 AppRegistry.registerComponent('AwesomeProject2', () => App);
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1
+    first: {
+      flex: 1.5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'powderblue'
     },
-    subcontainer: {
+    buttonContainer: {
+      margin: 15
+    },
+    alternativeLayoutButtonContainer: {
+      margin: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    second: {
       flex: 3,
       justifyContent: 'center',
       alignItems: 'center',
