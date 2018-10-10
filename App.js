@@ -15,7 +15,9 @@ import { Alert,
          ScrollView,
          FlatList,
          SectionList,
-         ActivityIndicator 
+         ActivityIndicator,
+         UIManager,
+         findNodeHandle 
         } 
         from 'react-native';
 
@@ -52,6 +54,11 @@ class Blink extends Component
     }
 }
 
+class MyAppText extends Component
+{
+
+}
+
 
 export default class App extends React.Component 
 {
@@ -59,6 +66,24 @@ export default class App extends React.Component
   {
     super(props);
     this.state = {text: ''};
+  }
+
+  _onPress()
+  {
+    const radioButton = this.state.radioButton === 'radiobutton_checked' ?
+      'radiobutton_unchecked' : 'radiobutton_checked'
+
+    this.setState
+    ({
+      radioButton: radioButton
+    });
+
+    if (radioButton === 'radiobutton_checked') 
+    {
+      UIManager.sendAccessibilityEvent(
+        findNodeHandle(this),
+        UIManager.AccessibilityEventTypes.typeViewClicked);
+    }
   }
 
   _onPressButton()
@@ -105,20 +130,28 @@ export default class App extends React.Component
     return (
         
         <ScrollView style={{ flex: 3 }}>
-            <View>
-              <FlatList
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Tap me!">
+              <View>
+                <FlatList
                 data={this.state.dataSource}
                 renderItem={({ item }) => <Text>{item.title}, {item.releaseYear}</Text>}
                 keyExtractor={({ id }, index) => id}
               />
-            </View>
-            <View style={styles.first}>
-               <View style={styles.buttonContainer}>
-                <Button 
-                  onPress={this._onPressButton}
-                  title="Press Me"
-                />
               </View>
+            </TouchableOpacity>
+            <View style={styles.first}>
+              <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Tap me!">
+                <View style={styles.buttonContainer}>
+                  <Button 
+                    onPress={this._onPressButton}
+                    title="Press Me"
+                  />
+                </View>
+              </TouchableOpacity>
               <View style={styles.buttonContainer}>
                 <Button
                   onPress={this._onPressButton}
@@ -144,7 +177,7 @@ export default class App extends React.Component
                 placeholder="Type here to translate!"
                 onChangeText={(text) => this.setState({text})}
               />
-              <Text style={{padding: 10, fontSize: 66}} >
+              <Text selectable={true} style={{padding: 10, fontSize: 66}} >
                 {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
               </Text>
               <Greeting name='Rexxar' />
@@ -157,7 +190,16 @@ export default class App extends React.Component
             </View>
             <View style={styles.third} >
               <View style={{ width: '100%', height: 50, backgroundColor: 'powderblue' }} />
-              <View style={{ width: '100%', height: 50, backgroundColor: 'skyblue' }} />
+              <View style={{ width: '100%', height: 50, backgroundColor: 'skyblue' }} >
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Tap me!"
+              onPress={this._onPress}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Press me!</Text>
+              </View>
+            </TouchableOpacity>
+              </View>
               <View style={{ width: '100%', height: 50, backgroundColor: 'steelblue' }} />
             </View>
             <View>
@@ -171,7 +213,7 @@ export default class App extends React.Component
                   { title: 'J', data: ['Jackson', 'James', 'Joel', 'John', 'Jillian','Jimmy'] },
                   { title: 'V', data: ['Vivian', 'Vivian', 'Victory'] },
                 ]}
-                renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
+                renderItem={({item}) => <Text selectable={true} style={styles.item}>{item}</Text>}
                 renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                 keyExtractor={(item, index) => index}
               />
