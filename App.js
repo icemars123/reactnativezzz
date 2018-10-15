@@ -17,7 +17,10 @@ import { Alert,
          SectionList,
          ActivityIndicator,
          UIManager,
-         findNodeHandle 
+         findNodeHandle,
+         ActionSheetIOS,
+         DatePickerIOS,
+         Animated,
         } 
         from 'react-native';
 
@@ -31,7 +34,8 @@ class Greeting extends Component {
 
 class Blink extends Component 
 {
-    constructor(props) {
+    constructor(props) 
+    {
 
         super(props);
         this.state = { isShowingText: true };
@@ -54,8 +58,32 @@ class Blink extends Component
     }
 }
 
-class MyAppText extends Component
+class AppDate extends Component 
 {
+  constructor(props) 
+   {
+     super(props);
+     this.state = { chosenDate: new Date() };
+
+     this.setDate = this.setDate.bind(this);
+   }
+
+  setDate(newDate) {
+    this.setState({ chosenDate: newDate })
+  }
+
+  render() {
+    console.log('test');
+    return (
+       
+        <DatePickerIOS
+          date={this.state.chosenDate}
+          onDateChange={this.setDate}
+        >{this.props.time}
+        </DatePickerIOS>
+        
+    )
+  }
 
 }
 
@@ -66,6 +94,13 @@ export default class App extends React.Component
   {
     super(props);
     this.state = {text: ''};
+    // this.state = { chosenDate: new Date() };
+    
+  }
+
+  setDate(newDate) 
+  {
+    this.setState({ chosenDate: newDate })
   }
 
   _onPress()
@@ -88,7 +123,17 @@ export default class App extends React.Component
 
   _onPressButton()
   {
-    Alert.alert('You tapped the button!');
+    Alert.alert
+    (
+      'Alert Title',
+      'Hello Gavin',
+      [
+        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false }
+    );
   }
 
   _onLongPressButton()
@@ -115,6 +160,50 @@ export default class App extends React.Component
       {
         console.error(error);
       });
+  }
+
+  showActionSheetWithOptions()
+  {
+    ActionSheetIOS.showActionSheetWithOptions
+    (
+      {
+        options: ['Cancel', 'Add', 'Remove',],
+        destructiveButtonIndex: 1,
+        cancelButtonIndex: 0,
+      },
+      (buttonIndex) => 
+      {
+        if (buttonIndex === 1) 
+        { /* destructive action */ }
+      }
+    );
+  }
+
+  showShareActionSheetWithOptions()
+  {
+    ActionSheetIOS.showShareActionSheetWithOptions
+    (
+      {
+          url: 'https://code.facebook.com',
+      },
+      (error) => 
+      {
+        console.error(error);
+      },
+      (success, method) => 
+      {
+        var text;
+        if (success) 
+        {
+          text = `Shared via ${method}`;
+        } 
+        else 
+        {
+          text = 'You didn\'t share';
+        }
+        // this.setState({text});
+      }
+    );
   }
 
   render() 
@@ -218,6 +307,15 @@ export default class App extends React.Component
                 keyExtractor={(item, index) => index}
               />
             </View>
+            <View style={styles.fifth}>
+              <Text onPress={this.showActionSheetWithOptions} style={styles.button}>
+                Click to show ActionSheetWithOptions
+              </Text>
+              <Text onPress={this.showShareActionSheetWithOptions} style={styles.button}>
+                Click to show ShareActionSheetWithOptions
+              </Text>
+              <AppDate time = 'Gavin'/>
+            </View>
         </ScrollView>
     );
   }
@@ -281,4 +379,22 @@ const styles = StyleSheet.create
       fontWeight: 'bold',
       backgroundColor: 'rgba(247,247,247,1.0)',
     },
+    fifth:
+    {
+      height:300,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'skyblue',
+    },
+    button: 
+    {
+      height: 50,
+      marginBottom: 10,
+      // fontWeight: "normal"
+    },
+    dateSelection:
+    {
+      flex: 1,
+      justifyContent: 'center'
+    }
 });
