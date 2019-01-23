@@ -24,6 +24,7 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.bigaccouting.test",
       "supportsTablet": true
     }
   }
